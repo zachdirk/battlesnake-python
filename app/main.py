@@ -13,10 +13,6 @@ class GameBoard:
         self.snakes = self.data["snakes"]["data"]
         self.me = self.data["you"]
 
-    def direction(self):
-        
-        
-
 G = None
 @bottle.route('/')
 def static():
@@ -44,7 +40,7 @@ def start():
     # TODO: Do things with data
 
     return {
-        'color': '#00FF00',
+        'color': '#FF0000',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': head_url
     }
