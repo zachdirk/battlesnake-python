@@ -7,16 +7,64 @@ class GameBoard:
         self.id = id
         self.width = width
         self.height = height
-                
+    
+    def parseSnakes(self, snakesIn):
+        snakes = []
+        for snake in snakesIn:
+            newSnake = []
+            for piece in snake["body"]["data"]:
+                x = piece["x"]
+                y = piece["y"]
+                newSnake.append((x,y))
+            snakes.append(newSnake)
+        return(snakes)
+        
+    def parseMe(self, meIn):
+        me = []
+        for piece in meIn["body"]["data"]:
+            x = piece["x"]
+            y = piece["y"]
+            me.append((x,y))
+        return(me)
+    
+    def safeSquare(self, x, y):
+        if x < 0 or x == self.width:
+            return False
+        elif y < 0 or y == self.height:
+            return False
+        for snake in self.snakes:
+            for piece in snake:
+                if piece[0] == x and piece[1] == y:
+                    return False
+        return True
+    
+    
     def parse(self, data):
         self.data = data
-        self.snakes = self.data["snakes"]["data"]
-        self.me = self.data["you"]
+        self.snakes = []
+        snakesIn = self.data["snakes"]["data"]
+        self.snakes = self.parseSnakes(snakesIn)            
+        meIn = self.data["you"]
+        self.me = self.parseMe(meIn)
+        
+    def directions(self):
+        x,y = self.me[0]
+        safes = []
+        if self.safeSquare(x+1, y):
+            safes.append("right")
+        if self.safeSquare(x,y-1):
+            safes.append("up")
+        if self.safeSquare(x-1,y):
+            safes.append("left")
+        if self.safeSquare(x,y+1):
+            safes.append("down")
+            
+        return(safes)
 
 G = None
 @bottle.route('/')
 def static():
-    return "the server is is running"
+    return "the server is running"
 
 
 @bottle.route('/static/<path:path>')
@@ -52,7 +100,8 @@ def move():
     G.data = data
     G.parse(data)
     # TODO: Do things with data
-    directions = ['up', 'down', 'left', 'right']
+    directions = G.directions()
+    print(directions)
     direction = random.choice(directions)
     print direction
     return {
