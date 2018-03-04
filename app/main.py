@@ -165,6 +165,8 @@ def move():
     taunt = random.choice(taunts)
     if taunt == "masturbate":
         taunts.remove("masturbate")
+    taunts = ["date", "skate", "procrastinate", "articulate", "rate", "bait", "ate", "great", "irate", "kate","late","freight"]
+    taunt = random.choice(taunts)
     return {
         'move': direction,
         'taunt': taunt
