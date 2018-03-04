@@ -160,9 +160,11 @@ def move():
     print safeDirections
     print foodDirections
     print direction
+    taunts = ["date", "skate", "procrastinate", "articulate", "rate", "bait", "ate", "great", "irate", "kate","late","freight"]
+    taunt = random.choice(taunts)
     return {
         'move': direction,
-        'taunt': 'battlesnake-python!'
+        'taunt': taunt
     }
 
 
