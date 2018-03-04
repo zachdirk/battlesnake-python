@@ -8,6 +8,14 @@ class GameBoard:
         self.width = width
         self.height = height
     
+    def parseFood(self, foodIn):
+        foods = []
+        for food in foodIn["data"]:
+            x = food["x"]
+            y = food["y"]
+            foods.append((x,y))
+        return(foods)
+    
     def parseSnakes(self, snakesIn):
         snakes = []
         for snake in snakesIn:
@@ -21,11 +29,15 @@ class GameBoard:
         
     def parseMe(self, meIn):
         me = []
+        self.health = meIn["health"]
         for piece in meIn["body"]["data"]:
             x = piece["x"]
             y = piece["y"]
             me.append((x,y))
         return(me)
+    
+    def distance(self, x1, x2, y1, y2):
+        return (abs(y2 - y1) + abs(x2 - x1))
     
     def safeSquare(self, x, y):
         if x < 0 or x == self.width:
@@ -46,8 +58,41 @@ class GameBoard:
         self.snakes = self.parseSnakes(snakesIn)            
         meIn = self.data["you"]
         self.me = self.parseMe(meIn)
+        foodIn = self.data["food"]
+        self.food = self.parseFood(foodIn)
         
-    def directions(self):
+    def minDistanceFood(self):
+        x,y = self.me[0]
+        i = 0
+        min = 0
+        distance = 100000
+        print(self.food)
+        for food in self.food:
+            print(type(food))
+            food_x, food_y = food
+            newDistance = self.distance(x, food_x, y, food_y)
+            if newDistance < distance:
+                distance = newDistance
+                min = i
+            i = i + 1
+        return(min)
+        
+    def foodDirections(self):
+        index = self.minDistanceFood()
+        food_x, food_y = self.food[index]
+        x,y = self.me[0]
+        dirs = []
+        if food_x > x:
+            dirs.append("right")
+        if food_x < x:
+            dirs.append("left")
+        if food_y > y:
+            dirs.append("down")
+        if food_y < y:
+            dirs.append("up")
+        return(dirs)
+        
+    def safeDirections(self):
         x,y = self.me[0]
         safes = []
         if self.safeSquare(x+1, y):
@@ -100,9 +145,20 @@ def move():
     G.data = data
     G.parse(data)
     # TODO: Do things with data
-    directions = G.directions()
-    print(directions)
-    direction = random.choice(directions)
+    safeDirections = G.safeDirections()
+    foodDirections = G.foodDirections()
+    foodDirectons = []
+    directions = []
+    if G.health < 50:
+        for dir in foodDirections:
+            if dir in safeDirections:
+                directions.append(dir)
+    if len(directions) == 0:
+        direction = random.choice(safeDirections)
+    else:
+        direction = random.choice(directions)
+    print safeDirections
+    print foodDirections
     print direction
     return {
         'move': direction,
