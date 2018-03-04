@@ -162,10 +162,7 @@ def move():
     print safeDirections
     print foodDirections
     print direction
-    taunt = random.choice(taunts)
-    if taunt == "masturbate":
-        taunts.remove("masturbate")
-    taunts = ["date", "skate", "procrastinate", "articulate", "rate", "bait", "ate", "great", "irate", "kate","late","freight"]
+    taunts = ["girate", "alternate", "altercate", "obfuscate", "obstinate", "reprebate", "percolate", "concatenate", "pyruvate", "date", "skate", "procrastinate", "articulate", "rate", "bait", "ate", "great", "irate", "kate","late","freight", "hate", "eight", "mate", "plait", "plate", "crate", "grate", "inflate", "estate", "instigate"]
     taunt = random.choice(taunts)
     return {
         'move': direction,
