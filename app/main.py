@@ -2,6 +2,8 @@ import bottle
 import os
 import random
 
+taunts = ["aerate", "girate", "fumigate", "fumate", "alternate", "altercate", "obfuscate", "obstinate", "reprebate", "percolate", "masturbate", "concatenate", "pyruvate", "date", "skate", "procrastinate", "articulate", "rate", "bait", "ate", "great", "irate", "kate","late","freight", "hate", "eight", "mate", "plait", "plate", "crate", "checkmate", "grate", "inflate", "estate", "instigate", "masturbate", "terminate"]
+
 class GameBoard:
     def __init__(self, id, width, height):
         self.id = id
@@ -134,7 +136,7 @@ def start():
 
     return {
         'color': '#FF0000',
-        'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+        'taunt': 'I am nate',
         'head_url': head_url
     }
 
@@ -160,9 +162,12 @@ def move():
     print safeDirections
     print foodDirections
     print direction
+    taunt = random.choice(taunts)
+    if taunt == "masturbate":
+        taunts.remove("masturbate")
     return {
         'move': direction,
-        'taunt': 'battlesnake-python!'
+        'taunt': taunt
     }
 
 
